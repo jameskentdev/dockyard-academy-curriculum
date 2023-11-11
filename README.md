@@ -37,13 +37,13 @@ See [start.livemd](https://github.com/DockYard-Academy/curriculum/blob/main/star
 
 <!-- course-outline-start -->
 ## Elixir Fundamentals
-* Prerequisites
-* Course Tools
-* Basics
-* Data Structures And Intro To Pattern Matching
-* Control Flow And Abstraction
-* Modules And Structs
-* Enumeration
+* ~~Prerequisites~~
+* ~~Course Tools~~
+* ~~Basics~~
+* ~~Data Structures And Intro To Pattern Matching~~
+* ~~Control Flow And Abstraction~~
+* ~~Modules And Structs~~
+* ~~Enumeration~~
 * Built-in Modules
 * Comprehensions And Non-Enumerable Data Types
 * Reduce
