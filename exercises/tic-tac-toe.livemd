@@ -161,7 +161,10 @@ defmodule TicTacToe do
       iex> TicTacToe.at(board, {0, 2})
       "A"
   """
-  def at(board, coordinate) do
+  def at(board, {x, y} = _coordinate) do
+    board
+    |> Enum.at(2 - y)
+    |> Enum.at(x)
   end
 
   @doc """
@@ -179,7 +182,109 @@ defmodule TicTacToe do
       iex> TicTacToe.fill(board, {1, 1}, "O")
       [[nil, nil, nil], [nil, "O", nil], [nil, nil, nil]]
   """
-  def fill(board, coordinate, symbol) do
+  def fill(board, {x, y} = _coordinate, symbol) do
+    # row =
+    #   board
+    #   |> Enum.at(flip_y(y))
+    #   |> List.update_at(x, fn val -> val = symbol end)
+
+    # List.update_at(board, flip_y(y), fn val -> val = row end)
+
+    List.update_at(board, 2 - y, fn row ->
+      List.replace_at(row, x, symbol)
+    end)
+  end
+
+  # defp flip_y(y) do
+  #   case y do
+  #     0 -> 2
+  #     1 -> 1
+  #     2 -> 0
+  #   end
+  # end
+
+  @doc """
+  Determine if a player has won the game.
+
+  ## Examples
+
+    Row Wins:
+
+    iex> TicTacToe.winner([["X", "X", "X"], [nil, nil, nil], [nil, nil, nil]])
+    "X"
+    iex> TicTacToe.winner([[nil, nil, nil], ["X", "X", "X"], [nil, nil, nil]])
+    "X"
+    iex> TicTacToe.winner([[nil, nil, nil], [nil, nil, nil], ["X", "X", "X"]])
+    "X"
+
+    Column Wins:
+
+    iex> TicTacToe.winner([["X", nil, nil], ["X", nil, nil], ["X", nil, nil]])
+    "X"
+    iex> TicTacToe.winner([[nil, "X", nil], [nil, "X", nil], [nil, "X", nil]])
+    "X"
+    iex> TicTacToe.winner([[nil, nil, "X"], [nil, nil, "X"], [nil, nil, "X"]])
+    "X"
+
+    Diagonal Wins
+
+    iex> TicTacToe.winner([["X", nil, nil], [nil, "X", nil], [nil, nil, "X"]])
+    "X"
+    iex> TicTacToe.winner([[nil, nil, "X"], [nil, "X", nil], ["X", nil, nil]])
+    "X"
+
+    No Winner
+
+    iex> TicTacToe.winner([[nil, nil, nil], [nil, nil, nil], [nil, nil, nil]])
+    nil
+    iex> TicTacToe.winner([[nil, "X", nil], [nil, "X", nil], [nil, nil, nil]])
+    nil
+
+  """
+  def winner(board) do
+    cond do
+      winner?(board, "X") -> "X"
+      winner?(board, "O") -> "O"
+      true -> nil
+    end
+  end
+
+  defp winner?(board, symbol) do
+    # Check if there are any rows where all of the row matches the symbol.
+    row_winner =
+      Enum.any?(board, fn row ->
+        Enum.all?(row, fn e -> e == symbol end)
+      end)
+
+    # Check if for any index 0..2, all of the rows' index matches the symbol.
+    column_winner =
+      Enum.any?(0..2, fn index ->
+        Enum.all?(board, fn row ->
+          Enum.at(row, index) == symbol
+        end)
+      end)
+
+    # Left to right diagonal
+    # We check that at each point {0,0} {1,1} {2,2} that the symbol matches. 
+    # Right to left diagonal
+    # We check that at each point {0,2} {1,1} {2,0} that the symbol matches. 
+    diagonal_winner =
+      Enum.all?(0..2, fn index ->
+        board
+        # x
+        |> Enum.at(index)
+        # y
+        |> Enum.at(index) == symbol
+      end) or
+        Enum.all?(0..2, fn index ->
+          board
+          # x
+          |> Enum.at(index)
+          # y
+          |> Enum.at(2 - index) == symbol
+        end)
+
+    row_winner or column_winner or diagonal_winner
   end
 end
 ```
