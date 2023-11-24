@@ -157,7 +157,13 @@ defmodule Rollable do
     iex> Rollable.replace("Ice Shard: deal 12d4 ice damage.")
     "Ice Shard: deal [12d4](https://www.google.com/search?q=roll+12d4) ice damage."
   """
+  @url "https://www.google.com/search?q=roll+"
   def replace(string) do
+    Regex.replace(
+      ~r/[1-99]d[4, 6, 8, 12, 20]/,
+      string,
+      "[" <> string <> "](" <> @url <> string <> ")"
+    )
   end
 
   def roll(string) do
