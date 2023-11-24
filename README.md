@@ -44,10 +44,10 @@ See [start.livemd](https://github.com/DockYard-Academy/curriculum/blob/main/star
 * ~~Control Flow And Abstraction~~
 * ~~Modules And Structs~~
 * ~~Enumeration~~
-* Built-in Modules
-* Comprehensions And Non-Enumerable Data Types
-* Reduce
-* Dates And Time
+* ~~Built-in Modules~~
+* ~~Comprehensions And Non-Enumerable Data Types~~
+* ~~Reduce~~
+* ~~Dates And Time~~
 * String Manipulation
 * Recursion
 ## Mix Projects
