@@ -168,18 +168,22 @@ end
 
 ```elixir
 defmodule FunctionSpecs do
+  @spec do_nothing :: nil
   def do_nothing do
     nil
   end
 
+  @spec accept_and_return_anything(any()) :: any()
   def accept_and_return_anything(anything) do
     anything
   end
 
+  @spec double(float()) :: float()
   def double(float) when is_float(float) do
     float * 2.0
   end
 
+  @spec double(integer()) :: integer()
   def double(integer) when is_integer(integer) do
     integer * 2
   end
