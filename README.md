@@ -48,8 +48,8 @@ See [start.livemd](https://github.com/DockYard-Academy/curriculum/blob/main/star
 * ~~Comprehensions And Non-Enumerable Data Types~~
 * ~~Reduce~~
 * ~~Dates And Time~~
-* String Manipulation
-* Recursion
+* ~~String Manipulation~~
+* ~~Recursion~~
 ## Mix Projects
 * Elixir Build Tooling
 * Testing With ExUnit
