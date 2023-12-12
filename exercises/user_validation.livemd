@@ -59,6 +59,12 @@ defmodule User do
     iex> User.validate_users([%User{name: nil}])
     [{:error, :missing_name}]
 
+    iex> User.validate_users([%User{name: 123}])
+    [{:error, :invalid_name}]
+
+    iex> User.validate_users([%User{name: 20.0}])
+    [{:error, :invalid_name}]
+
     iex> User.validate_users(["invalid user", "invalid user", "invalid user"])
     [{:error, :not_a_user}, {:error, :not_a_user}, {:error, :not_a_user}]
   """
@@ -66,16 +72,18 @@ defmodule User do
 
   def validate_users(users) do
     Enum.map(users, fn user ->
-      with %User{name: name} <- user, true <- {:missing_name, is_binary(name)} do
+      # With clause needs all conditions to be truthy for it to continue.
+      with %User{name: name} <- user,
+           true <- is_binary(name) do
         {:ok, user}
       else
-        false ->
-          {:error, :missing_name}
-
-        _ ->
-          {:e}
-          IO.inspect(thing)
-          :error
+        # If they are not truthy, it will hit the else case, where we can pattern match
+        # We cannot directly pattern match on it, but we can use a guard clause to_charlist
+        # to see if it's nil
+        _ when user.name == nil -> {:error, :missing_name}
+        # Add extra case to check when the name isn't nil but it isn't a binary value
+        _ when not is_binary(user.name) -> {:error, :invalid_name}
+        _ -> {:error, :not_a_user}
       end
     end)
   end
