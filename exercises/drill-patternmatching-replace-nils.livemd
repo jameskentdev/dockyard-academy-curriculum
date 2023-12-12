@@ -71,7 +71,13 @@ defmodule Replace do
   iex> Replace.nils([nil, nil, nil, nil, "5"], [1, 2, 3, 4, 5])
   [1, 2, 3, 4, "5"]
   """
+
   def nils(list1, list2) do
+    Enum.zip_with(list1, list2, fn
+      a, nil -> a
+      nil, b -> b
+      a, _b -> a
+    end)
   end
 end
 ```
