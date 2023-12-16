@@ -100,6 +100,15 @@ end
 
 ```elixir
 # Implementation Goes Here:
+defimpl Character, for: Barbarian do
+  def can_attack?(%Barbarian{} = _character, {x1, y1} = _origin, {x2, y2} = _target) do
+    # Normalize the distances
+    x = abs(x1 - x2)
+    y = abs(y1 - y2)
+
+    x <= 2 and y <= 2
+  end
+end
 
 # You May Use The Following Test Suite To Validate Your Solution.
 ExUnit.start(auto_run: false)
@@ -123,6 +132,10 @@ defmodule BarbarianTests do
 
     test "logic is not hardcoded to the {4, 4} position" do
       refute Character.can_attack?(%Barbarian{}, {3, 3}, {6, 6})
+    end
+
+    test "check for and/or" do
+      refute Character.can_attack?(%Barbarian{}, {3, 3}, {5, 7})
     end
   end
 end
@@ -163,6 +176,20 @@ Create a `Wizard` implementation for the `Character` protocol.
 
 ```elixir
 # Implementation Goes Here:
+defimpl Character, for: Wizard do
+  def can_attack?(%Wizard{} = _character, {x1, y1} = _origin, {x2, y2} = _target) do
+    # Normalize the distances
+    x = abs(x1 - x2)
+    y = abs(y1 - y2)
+
+    cond do
+      x1 == x2 -> true
+      y1 == y2 -> true
+      x == 1 and y == 1 -> true
+      true -> false
+    end
+  end
+end
 
 # You May Use The Following Test Suite To Validate Your Solution.
 ExUnit.start(auto_run: false)
