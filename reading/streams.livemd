@@ -230,7 +230,11 @@ In the Elixir cell below, try refactoring this code using the [Stream](https://h
 ```
 
 ```elixir
-
+1..100
+|> Stream.map(fn each -> div(each, 2) end)
+|> Stream.map(fn each -> each * 3 end)
+|> Stream.filter(fn each -> rem(each, 2) === 0 end)
+|> Enum.to_list()
 ```
 
 ## Stream Gotchas
@@ -430,7 +434,15 @@ end)
 </details>
 
 ```elixir
+starting_integer = 20
 
+Stream.iterate(starting_integer, fn acc ->
+  case rem(acc, 2) do
+    1 -> acc * 3 + 1
+    0 -> div(acc, 2)
+  end
+end)
+|> Enum.take(20)
 ```
 
 ### Stream.unfold/2
@@ -491,7 +503,13 @@ end)
 </details>
 
 ```elixir
-
+Stream.unfold(1, fn
+  acc ->
+    value = acc ** 3
+    next = acc + 1
+    {value, next}
+end)
+|> Enum.take(20)
 ```
 
 ## Commit Your Progress
