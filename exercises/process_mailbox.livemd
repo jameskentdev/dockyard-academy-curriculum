@@ -139,7 +139,38 @@ defmodule Mailbox do
       "Hello!"
   """
   def loop(state \\ []) do
+    receive do
+      {:send, message} ->
+        IO.puts(message)
+        IO.puts(length(state))
+        loop([message | state])
+
+      {:read, pid} ->
+        case state do
+          [head | tail] ->
+            send(pid, head)
+            loop(tail)
+
+          [] ->
+            send(pid, :empty)
+            loop([])
+        end
+    end
   end
+end
+```
+
+```elixir
+mailbox_process = spawn(fn -> Mailbox.loop() end)
+
+send(mailbox_process, {:send, "Hello world!"})
+```
+
+```elixir
+send(mailbox_process, {:read, self()})
+
+receive do
+  message -> IO.puts(message)
 end
 ```
 
