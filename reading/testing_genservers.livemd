@@ -216,12 +216,16 @@ defmodule CountDown do
 
   # Client
 
-  def start_link(_opts) do
-    # Implementation
+  def start_link(_opts \\ []) do
+    GenServer.start_link(__MODULE__, 0, name: __MODULE__)
   end
 
-  def decrement(pid) do
-    # Implementation
+  def get_count() do
+    GenServer.call(__MODULE__, :get_count)
+  end
+
+  def decrement() do
+    GenServer.call(__MODULE__, :decrement)
   end
 
   # Server
@@ -233,25 +237,36 @@ defmodule CountDown do
 
   @impl true
   def handle_call(:get_count, _from, state) do
-    # Implementation
+    {:reply, state, state}
   end
 
   @impl true
   def handle_call(:decrement, _from, state) do
-    # Implementation
+    {:reply, state - 1, state - 1}
   end
 end
+```
 
+```elixir
 ExUnit.start(auto_run: false)
 
 defmodule CounterTest do
   use ExUnit.Case
 
   # implement your test
-  test "decrement/1"
+  test "decrement/1" do
+    {:ok, _} = CountDown.start_link()
+    assert CountDown.get_count() == 0
+    CountDown.decrement()
+    assert CountDown.get_count() == -1
+  end
 end
 
 ExUnit.run()
+```
+
+```elixir
+CountDown.start_link()
 ```
 
 ## Commit Your Progress
