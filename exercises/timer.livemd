@@ -100,18 +100,47 @@ Implement the `Timer` module as documented below.
 defmodule Timer do
   @moduledoc """
   iex> {:ok, pid} = Timer.start_link([])
-  iex> Timer.seconds(pid)
+  iex> Timer.get_time(pid)
   0
   iex> Process.sleep(1200)
-  iex> Timer.seconds(pid)
+  iex> Timer.get_time(pid)
   1
   """
   use GenServer
 
+  @one_second 1000
+
   def start_link(_opts) do
+    GenServer.start_link(__MODULE__, 0, name: __MODULE__)
   end
 
   def get_time(timer_pid) do
+    GenServer.call(timer_pid, :get_time)
+  end
+
+  @impl true
+  def init(init_arg) do
+    handle_time()
+    {:ok, init_arg}
+  end
+
+  @impl true
+  def handle_call(:get_time, _from, state) do
+    {:reply, state, state}
+  end
+
+  # https://openmymind.net/Elixir-A-Little-Beyond-The-Basics-Part-8-genservers/
+  # > While we usually interact with GenServer's using call/2 and cast/2, you can use send/2 
+  # > and Process.send_after/3 as well. These messages get handled by handle_info/2.
+
+  @impl true
+  def handle_info(:increment_time, state) do
+    handle_time()
+    {:noreply, state + 1}
+  end
+
+  defp handle_time() do
+    Process.send_after(self(), :increment_time, @one_second)
   end
 end
 ```
