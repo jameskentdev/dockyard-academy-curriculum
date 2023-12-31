@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" class="[scrollbar-gutter:stable]">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="csrf-token" content={get_csrf_token()} />
+    <.live_title suffix=" · Phoenix Framework">
+      <%= assigns[:page_title] || "PhoenixNavigation" %>
+    </.live_title>
+    <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
+    <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
+    </script>
+  </head>
+  <div>
+    <div class="bg-[#ACBDBA] min-h-screen min-w-max overscroll-none">
+      <div class="bg-[#160F29] text-[#DE6C83] flex justify-left space-x-5 pl-5 p-2">
+        <.link navigate={~p"/"}>Home</.link>
+        <.link navigate={~p"/about"}>About</.link>
+        <.link navigate={~p"/projects"}>Projects</.link>
+      </div>
+      <body class="bg-white antialiased">
+        <%= @inner_content %>
+      </body>
+    </div>
+  </div>
+</html>
